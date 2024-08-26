@@ -1,1 +1,1 @@
-pub mod search_funcs;
+pub mod string_search_funcs;

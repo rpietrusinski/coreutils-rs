@@ -12,6 +12,8 @@ learning purposes.
 
 ### Ready
 - grep
+- cp
+- mv
 
 ### In-progress
-- cp
+
