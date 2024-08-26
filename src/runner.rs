@@ -31,3 +31,19 @@ pub fn run_mv(config: config::ConfigCp) -> Result<(), Box<dyn Error>> {
     fs::remove_file(config.source_file)?;
     Ok(())
 }
+
+pub fn run_ls(config: config::ConfigLs) -> Result<(), Box<dyn Error>> {
+
+    if let Ok(entries) = fs::read_dir(config.dir) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                if let Ok(metadata) = entry.metadata() {
+                    println!("{:?}: {:?}", entry.path(), metadata.permissions());
+                } else {
+                    println!("Couldn't get metadata for {:?}", entry.path());
+                }
+            }
+        }
+    }
+    Ok(())
+}

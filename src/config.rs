@@ -13,6 +13,11 @@ pub struct ConfigCp {
     pub dest_file: String,
 }
 
+#[derive(Debug)]
+pub struct ConfigLs {
+    pub dir: String,
+}
+
 impl ConfigGrep {
     pub fn build<T>(mut args: T) -> Result<Self, &'static str>
     where
@@ -64,6 +69,24 @@ impl ConfigCp {
     }
 }
 
+impl ConfigLs {
+    pub fn build<T>(mut args: T) -> Result<Self, &'static str>
+    where
+        T: Iterator<Item = String>,
+    {
+        args.next();
+
+        let dir: String = match args.next() {
+            Some(x) => x,
+            None => return Err("Didn't get directory parameter"),
+        };
+
+        Ok(Self {
+            dir,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -95,5 +118,17 @@ mod tests {
         let config = ConfigCp::build(args_iterator).unwrap();
         assert_eq!(config.source_file, "source_file".to_string());
         assert_eq!(config.dest_file, "dest_file".to_string());
+    }
+
+    #[test]
+    fn test_config_ls_build() {
+        let args_iterator = [
+            "binary_name".to_string(),
+            "dir".to_string(),
+        ]
+        .into_iter();
+
+        let config = ConfigLs::build(args_iterator).unwrap();
+        assert_eq!(config.dir, "dir".to_string());
     }
 }
