@@ -18,6 +18,12 @@ pub struct ConfigLs {
     pub dir: String,
 }
 
+#[derive(Debug)]
+pub struct ConfigHead {
+    pub file: String,
+    pub num_lines: u32,
+}
+
 impl ConfigGrep {
     pub fn build<T>(mut args: T) -> Result<Self, &'static str>
     where
@@ -81,8 +87,35 @@ impl ConfigLs {
             None => return Err("Didn't get directory parameter"),
         };
 
+        Ok(Self { dir })
+    }
+}
+
+impl ConfigHead {
+    pub fn build<T>(mut args: T) -> Result<Self, &'static str>
+    where
+        T: Iterator<Item = String>,
+    {
+        args.next();
+
+        let file: String = match args.next() {
+            Some(x) => x,
+            None => return Err("Didn't get file parameter"),
+        };
+
+        let num_lines: String = match args.next() {
+            Some(x) => x,
+            None => return Err("Didn't get num_lines parameter"),
+        };
+
+        let num_lines_int: u32 = match num_lines.parse() {
+            Ok(t) => t,
+            Err(_z) => return Err("Unable to parse num_lines to int"),
+        };
+
         Ok(Self {
-            dir,
+            file,
+            num_lines: num_lines_int,
         })
     }
 }
@@ -122,11 +155,7 @@ mod tests {
 
     #[test]
     fn test_config_ls_build() {
-        let args_iterator = [
-            "binary_name".to_string(),
-            "dir".to_string(),
-        ]
-        .into_iter();
+        let args_iterator = ["binary_name".to_string(), "dir".to_string()].into_iter();
 
         let config = ConfigLs::build(args_iterator).unwrap();
         assert_eq!(config.dir, "dir".to_string());

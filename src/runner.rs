@@ -1,5 +1,5 @@
 use crate::config;
-use crate::search::string_search_funcs::{search_case_sensitive, search_case_insensitive};
+use crate::search::string_search_funcs::{search_case_insensitive, search_case_sensitive};
 use std::error::Error;
 use std::fs;
 
@@ -33,7 +33,6 @@ pub fn run_mv(config: config::ConfigCp) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn run_ls(config: config::ConfigLs) -> Result<(), Box<dyn Error>> {
-
     if let Ok(entries) = fs::read_dir(config.dir) {
         for entry in entries {
             if let Ok(entry) = entry {
@@ -43,6 +42,19 @@ pub fn run_ls(config: config::ConfigLs) -> Result<(), Box<dyn Error>> {
                     println!("Couldn't get metadata for {:?}", entry.path());
                 }
             }
+        }
+    }
+    Ok(())
+}
+
+pub fn run_head(config: config::ConfigHead) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.file)?;
+
+    for (item, idx) in contents.lines().zip(0u32..) {
+        if idx < config.num_lines {
+            println!("{}", item);
+        } else {
+            break;
         }
     }
     Ok(())
