@@ -1,13 +1,19 @@
 use std::env;
 
 #[derive(Debug)]
-pub struct Config {
+pub struct ConfigGrep {
     pub query: String,
     pub file_path: String,
     pub ignore_case: bool,
 }
 
-impl Config {
+#[derive(Debug)]
+pub struct ConfigCp {
+    pub source_file: String,
+    pub dest_file: String,
+}
+
+impl ConfigGrep {
     pub fn build<T>(mut args: T) -> Result<Self, &'static str>
     where
         T: Iterator<Item = String>,
@@ -34,12 +40,36 @@ impl Config {
     }
 }
 
+impl ConfigCp {
+    pub fn build<T>(mut args: T) -> Result<Self, &'static str>
+    where
+        T: Iterator<Item = String>,
+    {
+        args.next();
+
+        let source_file: String = match args.next() {
+            Some(x) => x,
+            None => return Err("Didn't get source file parameter"),
+        };
+
+        let dest_file: String = match args.next() {
+            Some(x) => x,
+            None => return Err("Didn't get dest file parameter"),
+        };
+
+        Ok(Self {
+            source_file,
+            dest_file,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_config_build() {
+    fn test_config_grep_build() {
         let args_iterator = [
             "binary_name".to_string(),
             "query".to_string(),
@@ -47,9 +77,23 @@ mod tests {
         ]
         .into_iter();
 
-        let config = Config::build(args_iterator).unwrap();
+        let config = ConfigGrep::build(args_iterator).unwrap();
         assert_eq!(config.query, "query".to_string());
         assert_eq!(config.file_path, "file_path".to_string());
         assert_eq!(config.ignore_case, false);
+    }
+
+    #[test]
+    fn test_config_cp_build() {
+        let args_iterator = [
+            "binary_name".to_string(),
+            "source_file".to_string(),
+            "dest_file".to_string(),
+        ]
+        .into_iter();
+
+        let config = ConfigCp::build(args_iterator).unwrap();
+        assert_eq!(config.source_file, "source_file".to_string());
+        assert_eq!(config.dest_file, "dest_file".to_string());
     }
 }
