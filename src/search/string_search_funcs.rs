@@ -1,5 +1,5 @@
 pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    contents.lines().filter(|x| x.contains(query)).collect()
+    contents.lines().filter(|&x| x.contains(query)).collect()
 }
 
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -7,7 +7,7 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
 
     contents
         .lines()
-        .filter(|x| x.to_lowercase().contains(&query))
+        .filter(|&x| x.to_lowercase().contains(&query))
         .collect()
 }
 

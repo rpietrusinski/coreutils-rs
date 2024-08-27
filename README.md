@@ -14,6 +14,8 @@ learning purposes.
 - grep
 - cp
 - mv
+- ls
+- head
 
-### In-progress
+
 

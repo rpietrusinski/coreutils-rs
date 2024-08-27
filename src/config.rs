@@ -160,4 +160,17 @@ mod tests {
         let config = ConfigLs::build(args_iterator).unwrap();
         assert_eq!(config.dir, "dir".to_string());
     }
+
+    #[test]
+    fn test_config_head_build() {
+        let args_iterator = [
+            "binary_name".to_string(),
+            "file".to_string(),
+            "6".to_string(),
+        ].into_iter();
+
+        let config = ConfigHead::build(args_iterator).unwrap();
+        assert_eq!(config.file, "file".to_string());
+        assert_eq!(config.num_lines, 6);
+    }
 }
