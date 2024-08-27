@@ -3,6 +3,14 @@ use coreutils_rs::runner::run_mv;
 use std::env;
 use std::process;
 
+/// GNU's mv functionality. Moves SOURCE_FILE into DEST_FILE
+///
+/// # Examples
+///
+/// ```
+/// ./mv SOURCE_FILE DEST_FILE
+/// ./mv poem.txt poem.md
+/// ```
 fn main() {
     let config: ConfigCp = ConfigCp::build(env::args()).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {err}");

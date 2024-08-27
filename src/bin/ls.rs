@@ -3,6 +3,14 @@ use coreutils_rs::runner::run_ls;
 use std::env;
 use std::process;
 
+/// GNU's ls functionality. Returns contents of a DIR
+///
+/// # Examples
+///
+/// ```
+/// ./ls DIR
+/// ./ls .
+/// ```
 fn main() {
     let config: ConfigLs = ConfigLs::build(env::args()).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {err}");
