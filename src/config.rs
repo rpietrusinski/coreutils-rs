@@ -1,7 +1,7 @@
 use clap::Parser;
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version, about = "Copy file from <source> to <dest>")]
 pub struct CpCli {
     #[arg(short, long)]
     pub source: String,
@@ -10,7 +10,8 @@ pub struct CpCli {
 }
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version, about = "Return lines from text file <file> including <query> phrase. \
+Setting <ignore_case> will impose case insensitivity")]
 pub struct GrepCli {
     #[arg(short, long)]
     pub query: String,
@@ -21,14 +22,14 @@ pub struct GrepCli {
 }
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version, about = "List files and directories inside <dir>")]
 pub struct LsCli {
     #[arg(short, long)]
     pub dir: String,
 }
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version, about = "Return <num_lines> first lines from a text file <file>")]
 pub struct HeadCli {
     #[arg(short, long)]
     pub file: String,
