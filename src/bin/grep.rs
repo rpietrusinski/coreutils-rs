@@ -1,23 +1,24 @@
-use coreutils_rs::config::ConfigGrep;
-use coreutils_rs::runner::run_grep;
-use std::env;
+use coreutils_rs::{
+    config::GrepCli,
+    runner::run_grep,
+};
 use std::process;
+use clap::Parser;
 
 /// GNU's grep functionality. Returns lines from a FILE that match particular QUERY
 ///
 /// # Examples
 ///
 /// ```
-/// ./grep QUERY FILE
-/// ./grep somebody poem.txt
+/// ./grep -q QUERY -f FILE <-i>
+/// ./grep -query QUERY -file FILE <-ignore_case>
+/// ./grep -q somebody -f poem.txt
+/// ./grep -query somebody -file poem.txt
 /// ```
 fn main() {
-    let config: ConfigGrep = ConfigGrep::build(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {err}");
-        process::exit(1);
-    });
+    let cli = GrepCli::parse();
 
-    if let Err(e) = run_grep(config) {
+    if let Err(e) = run_grep(&cli) {
         eprintln!("Application error: {e}");
         process::exit(1);
     }

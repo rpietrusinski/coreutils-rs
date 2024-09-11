@@ -1,23 +1,23 @@
-use coreutils_rs::config::ConfigLs;
-use coreutils_rs::runner::run_ls;
-use std::env;
+use coreutils_rs::{
+    config::LsCli,
+    runner::run_ls,
+};
 use std::process;
+use clap::Parser;
 
 /// GNU's ls functionality. Returns contents of a DIR
 ///
 /// # Examples
 ///
 /// ```
-/// ./ls DIR
+/// ./ls -d DIR
+/// ./ls -dir DIR
 /// ./ls .
 /// ```
 fn main() {
-    let config: ConfigLs = ConfigLs::build(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {err}");
-        process::exit(1);
-    });
+    let cli = LsCli::parse();
 
-    if let Err(e) = run_ls(config) {
+    if let Err(e) = run_ls(&cli) {
         eprintln!("Application error: {e}");
         process::exit(1);
     }
