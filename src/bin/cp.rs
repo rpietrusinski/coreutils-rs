@@ -1,24 +1,25 @@
-use coreutils_rs::config::ConfigCp;
-use coreutils_rs::runner::run_cp;
-use std::env;
+use coreutils_rs::{
+    config::CpCli,
+    runner::run_cp,
+};
 use std::process;
+use clap::Parser;
 
 /// GNU's cp functionality. Copies SOURCE_FILE into DEST_FILE
 ///
 /// # Examples
 ///
 /// ```
-/// ./cp SOURCE_FILE DEST_FILE
-/// ./cp poem.txt poem.md
+/// ./cp -s SOURCE -d DEST
+/// ./cp -source SOURCE -dest DEST
+/// ./cp -s poem.txt -d poem.md
 /// ```
 fn main() {
-    let config: ConfigCp = ConfigCp::build(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {err}");
-        process::exit(1);
-    });
+    let cli = CpCli::parse();
 
-    if let Err(e) = run_cp(config) {
+    if let Err(e) = run_cp(&cli) {
         eprintln!("Application error: {e}");
         process::exit(1);
     }
 }
+

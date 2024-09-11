@@ -1,23 +1,23 @@
-use coreutils_rs::config::ConfigHead;
-use coreutils_rs::runner::run_head;
-use std::env;
+use coreutils_rs::{
+    config::HeadCli,
+    runner::run_head,
+};
 use std::process;
+use clap::Parser;
 
 /// GNU's head functionality. Returns top NUM_LINES from a FILE
 ///
 /// # Examples
 ///
 /// ```
-/// ./head FILE NUM_LINES
+/// ./head -f FILE -n NUM_LINES
+/// ./head -file FILE -num_lines NUM_LINES
 /// ./head poem.txt 4
 /// ```
 fn main() {
-    let config: ConfigHead = ConfigHead::build(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {err}");
-        process::exit(1);
-    });
+    let cli = HeadCli::parse();
 
-    if let Err(e) = run_head(config) {
+    if let Err(e) = run_head(&cli) {
         eprintln!("Application error: {e}");
         process::exit(1);
     }

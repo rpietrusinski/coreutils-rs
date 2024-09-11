@@ -17,5 +17,11 @@ learning purposes.
 - ls
 - head
 
+## Log
+- v0.1.0
+  - command line argument parsing based on Rust standard library
+  - ready to use are: grep, cp, mv, ls, head
+- v0.2.0
+  - command line argument parsing based on Clap library
 
 
